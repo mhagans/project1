@@ -17,7 +17,7 @@ int main() {
     //Read file store each line into array to be read by Analyzer
 
     //Parse each line into tokens
-    LexicalAnalyzer LA("a3bc+ 223 ++ vd3 ghg  g; 12.34");
+    LexicalAnalyzer LA("a3bc+ 223 ++ vd3 ghg  /****/ g; 12.34");
 
     while(token != STOP){
         token = LA.lex();
