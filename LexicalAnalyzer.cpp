@@ -7,9 +7,15 @@ LexicalAnalyzer::LexicalAnalyzer(string in) : input(in), charClass(ERROR), nextC
 LexicalAnalyzer::~LexicalAnalyzer() {
 }
 
-void LexicalAnalyzer::setNewInput(string in) {
+void LexicalAnalyzer::setNewInput(string in)   {
     input = in;
+    printInput = in;
     getChar();
+}
+
+void LexicalAnalyzer::linePrint() {
+
+    cout << "INPUT: "<< printInput << endl;
 }
 
 void LexicalAnalyzer::getChar(){
@@ -35,7 +41,7 @@ void LexicalAnalyzer::getChar(){
         charClass = STOP;
 
     if(nextChar == '+')
-        charClass = PLUS_CODE;
+        charClass = SYMBOL;
 }
 
 void LexicalAnalyzer::addChar() {
@@ -76,10 +82,10 @@ int LexicalAnalyzer::lex() {
             }
             return INT;
             break;
-        case PLUS_CODE:
+        case SYMBOL:
             addChar();
             getChar();
-            return PLUS_CODE;
+            return SYMBOL;
             break;
 
     }

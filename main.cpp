@@ -21,7 +21,8 @@ int main() {
 
     while(token != STOP){
         token = LA.lex();
-        cout << "INPUT: \"" <<LA.lexenum<<"\"   token: "<<tokenConverter(token)<<endl;
+        LA.linePrint();
+        cout << tokenConverter(token) <<"\t" <<LA.lexenum<< endl;
     }
 
 
@@ -43,8 +44,11 @@ string tokenConverter(int t){
             return "ERROR";
         case STOP:
             return "STOP";
-        case PLUS_CODE:
-            return "PLUS CODE";
+        case FLOAT:
+            return "FLOAT";
+        case SYMBOL:
+            return "SYMBOL";
+
         default:
             return "UNKOWN";
     }
