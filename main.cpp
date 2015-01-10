@@ -22,7 +22,7 @@ int main() {
     while(token != STOP){
         token = LA.lex();
         LA.linePrint();
-        cout << tokenConverter(token) <<"\t" <<LA.lexenum<< endl;
+        cout << tokenConverter(token) <<":\t" <<LA.lexenum<< endl;
     }
 
 

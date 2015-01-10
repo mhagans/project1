@@ -1,6 +1,7 @@
 #include "LexicalAnalyzer.hpp"
 
 LexicalAnalyzer::LexicalAnalyzer(string in) : input(in), charClass(ERROR), nextChar(' '), lexenum("") {
+    printInput = in;
     getChar();
 }
 
