@@ -1,4 +1,7 @@
 #include "LexicalAnalyzer.hpp"
+#include <strings.h>
+
+
 
 LexicalAnalyzer::LexicalAnalyzer(string in) : input(in), charClass(ERROR), nextChar(' '), lexenum("") {
     printInput = in;
@@ -17,6 +20,20 @@ void LexicalAnalyzer::setNewInput(string in)   {
 void LexicalAnalyzer::linePrint() {
 
     cout << "INPUT: "<< printInput << endl;
+}
+
+bool LexicalAnalyzer::isKeyword(string in){
+
+    bool keyword = false;
+    for (int i = 0; i < 7; i++) {
+        if(sKeywords[i].compare(in) == 0){
+            keyword = true;
+            break;
+        }
+
+    }
+    return keyword;
+
 }
 
 void LexicalAnalyzer::getChar(){
@@ -72,7 +89,7 @@ int LexicalAnalyzer::lex() {
                 addChar();
                 getChar();
             }
-            return ID;
+            return isKeyword(lexenum) ? KEYWORD : ID;
             break;
         case DIGIT:
             addChar();

@@ -3,10 +3,15 @@
 
 #include <iostream>
 #include <string>
+#include <ctype.h>
+
 
 using namespace std;
 
-enum {DIGIT, LETTER, ID, INT, FLOAT, ERROR, SPACE, STOP, SYMBOL};
+enum {DIGIT, LETTER, KEYWORD, ID, INT, FLOAT, ERROR, SPACE, STOP, SYMBOL};
+
+
+
 
 class LexicalAnalyzer{
 
@@ -15,12 +20,15 @@ public:
     int charClass;
     string lexenum;
     string printInput;
+    string sKeywords [7] = {"if", "else", "int", "float", "return", "void", "while"};
+
 
 private:
     string input;
 
 public:
     int lex();
+    bool isKeyword(string in);
     void setNewInput(string in);
     LexicalAnalyzer(string in="");
     void linePrint();

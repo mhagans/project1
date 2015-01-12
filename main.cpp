@@ -9,15 +9,17 @@ using namespace std;
 
 string tokenConverter(int t);
 
+
 int main() {
 
-    cout<<"*********** Lexical Analyzer"<<endl;
+    cout<<"*********** Lexical Analyzer*************"<<endl;
     int token = SPACE;
 
-    //Read file store each line into array to be read by Analyzer
+    //Read file store each line into array to be read by Analyzer   a3bc+ float 223  int++ vd3 ghg   if else  /****/ g; 12.34
+
 
     //Parse each line into tokens
-    LexicalAnalyzer LA("a3bc+ 223 ++ vd3 ghg  /****/ g; 12.34");
+    LexicalAnalyzer LA("int g 4 cd (int u, int v)      {");
 
     while(token != STOP){
         token = LA.lex();
@@ -48,6 +50,8 @@ string tokenConverter(int t){
             return "FLOAT";
         case SYMBOL:
             return "SYMBOL";
+        case KEYWORD:
+            return "KEYWORD";
 
         default:
             return "UNKOWN";
