@@ -97,6 +97,7 @@ int LexicalAnalyzer::lex() {
             while (charClass == DIGIT) {
                 addChar();
                 getChar();
+                // This will be to check for a float
             }
             return INT;
             break;

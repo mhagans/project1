@@ -2,6 +2,8 @@
 #define _P1_
 
 #include <iostream>
+#include <fstream>
+#include <conio.h>
 #include "string"
 #include "LexicalAnalyzer.hpp"
 
@@ -10,22 +12,34 @@ using namespace std;
 string tokenConverter(int t);
 
 
-int main() {
+int main(int argc, char **argv) {
+    string filename;
+
+    if(argc < 2){
+        cout << "Invalid number of arugments entered"<<endl;
+        return 0;
+    }else{
+        filename = argv[1];
+    }
 
     cout<<"*********** Lexical Analyzer*************"<<endl;
+
     int token = SPACE;
 
     //Read file store each line into array to be read by Analyzer   a3bc+ float 223  int++ vd3 ghg   if else  /****/ g; 12.34
+   // fstream File()
+    //Stop program at end of file
 
 
     //Parse each line into tokens
-    LexicalAnalyzer LA("int g 4 cd (int u, int v)      {");
-
+    LexicalAnalyzer LA("a3bc+ float 223  3@22 int ++ vd3 ghg   if else  /****/ g; 12.34");
+    LA.linePrint();
     while(token != STOP){
         token = LA.lex();
-        LA.linePrint();
         cout << tokenConverter(token) <<":\t" <<LA.lexenum<< endl;
     }
+    End:
+    return 0;
 
 
 }
