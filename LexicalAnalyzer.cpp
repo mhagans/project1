@@ -36,15 +36,34 @@ bool LexicalAnalyzer::isKeyword(string in){
 
 }
 
+bool LexicalAnalyzer::isSymbol() {
+    bool symbol = false;
+    if (nextChar == '(' || nextChar == ')' || nextChar == ',' || nextChar =='{' || nextChar == '}' ||
+            nextChar == ';' || nextChar == '[' || nextChar == ']' ||
+            nextChar == ':' || nextChar == '+' || nextChar == '-' || nextChar == '*' || nextChar == '/' || nextChar == '=' ||
+            nextChar == '<' || nextChar == '>' || nextChar == '!'){
+        symbol = true;
+    }
+    return symbol;
+}
+
 void LexicalAnalyzer::getChar(){
+
     if(input.size() > 0) {
         nextChar = input[0];
         input.erase(0, 1);
+        if(isComment)
+            goto Inline;
+        if(isBlock)
+            goto Block;
+
     } else{
         nextChar = '$';
     }
 
     charClass = ERROR;
+    isComment = false;
+    isBlock = false;
 
     if((nextChar > 64 && nextChar < 91) || (nextChar > 96 && nextChar < 123))
         charClass = LETTER;
@@ -58,8 +77,54 @@ void LexicalAnalyzer::getChar(){
     if(nextChar == '$')
         charClass = STOP;
 
-    if(nextChar == '+')
-        charClass = SYMBOL;
+    if(isSymbol()){
+        if(nextChar == '/'){
+            tempChar = input[0];
+
+            if(nextChar == '/' && tempChar == '/'){
+                isComment = true;
+                Inline:
+                while(input.size() > 0){
+                    getChar();
+                }
+                isComment = false;
+                getChar();
+            }else{
+                if(nextChar == '/' && tempChar == '*'){
+                    isBlock = true;
+                    getChar();
+                    Block:
+                        tempChar = input[0];
+                    if(nextChar == '*' && tempChar == '*'){
+                        getChar();
+                    }
+                    while(nextChar != '*' && tempChar != '/'){
+
+                        getChar();
+                        if(input.size() == 0)
+                            goto End;
+
+                    }
+
+
+
+
+
+                }else{
+                    charClass = SYMBOL;
+                }
+
+            }
+        }else{
+            charClass = SYMBOL;
+        }
+        End:
+            ;
+    }
+
+
+
+
 }
 
 void LexicalAnalyzer::addChar() {
@@ -68,6 +133,7 @@ void LexicalAnalyzer::addChar() {
 
 int LexicalAnalyzer::lex() {
     lexenum = "";
+
 
     while (charClass == SPACE) getChar();
 

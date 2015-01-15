@@ -5,6 +5,7 @@
 #include <fstream>
 #include <conio.h>
 #include <ctype.h>
+#include <regex>
 #include "string"
 #include "LexicalAnalyzer.hpp"
 
@@ -32,8 +33,14 @@ int main(int argc, char **argv) {
 
     //Read file store each line into array to be read by Analyzer   a3bc+ float 223  int++ vd3 ghg   if else  /****/ g; 12.34
    ifstream FILE(filename);
-    bool initial = true;
+    regex comment("(/\\*.*\\*/)");
+    regex reg1(comment);
+
+
     getline(FILE, fileLine);
+
+
+
     LexicalAnalyzer LA(fileLine);
     if(FILE.is_open()){
         do{
@@ -41,9 +48,14 @@ int main(int argc, char **argv) {
                 LA.linePrint();
                 while(token != STOP){
                     token = LA.lex();
-                    cout << tokenConverter(token) <<":\t" <<LA.lexenum<< endl;
+                    if(token == STOP){
+                    }else{
+                        cout << tokenConverter(token) <<":\t" <<LA.lexenum<< endl;
+                    }
+
                 }
             getline(FILE, fileLine);
+
             LA.setNewInput(fileLine);
             token = SPACE;
 

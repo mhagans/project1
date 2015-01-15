@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <ctype.h>
+#include <fstream>
 
 
 using namespace std;
@@ -21,7 +22,11 @@ public:
     string lexenum;
     string printInput;
     string sKeywords [7] = {"if", "else", "int", "float", "return", "void", "while"};
-    //char sSymbols [21] = {'+', '-', '*', '/', '<', '<=', '>', '>=', '==', '!=', '=', ';', ',', '(', ')', '[', ']', '{', '}', '/*', '*/'};
+    bool isComment;
+    bool isBlock;
+    char tempChar;
+
+
 
 
 private:
@@ -30,7 +35,7 @@ private:
 public:
     int lex();
     bool isKeyword(string in);
-   // bool isSymbol();
+    bool isSymbol();
     void setNewInput(string in);
     LexicalAnalyzer(string in="");
     void linePrint();
