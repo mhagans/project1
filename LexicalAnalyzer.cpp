@@ -107,11 +107,6 @@ void LexicalAnalyzer::getChar(){
     if(input.size() > 0) {
         nextChar = input[0];
         input.erase(0, 1);
-        if(isComment)
-            goto Inline;
-        if(isBlock)
-            goto Block;
-
     } else{
         nextChar = '$';
     }
@@ -145,36 +140,12 @@ void LexicalAnalyzer::getChar(){
                 isComment = false;
                 getChar();
             }else{
-                if(nextChar == '/' && tempChar == '*'){
-                    isBlock = true;
-                    getChar();
-                    Block:
-                        tempChar = input[0];
-                    if(nextChar == '*' && tempChar == '*'){
-                        getChar();
-                    }
-                    while(nextChar != '*' && tempChar != '/'){
-
-                        getChar();
-                        if(input.size() == 0)
-                            goto End;
-
-                    }
-
-
-
-
-
-                }else{
-                    charClass = SYMBOL;
-                }
-
+                charClass = SYMBOL;
             }
         }else{
             charClass = SYMBOL;
         }
-        End:
-            ;
+
     }
 
 
