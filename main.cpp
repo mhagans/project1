@@ -33,10 +33,6 @@ int main(int argc, char **argv) {
 
     //Read file store each line into array to be read by Analyzer   a3bc+ float 223  int++ vd3 ghg   if else  /****/ g; 12.34
    ifstream FILE(filename);
-    regex comment("(/\\*.*\\*/)");
-    regex reg1(comment);
-
-
     getline(FILE, fileLine);
 
 

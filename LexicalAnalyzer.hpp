@@ -5,6 +5,7 @@
 #include <string>
 #include <ctype.h>
 #include <fstream>
+#include <stack>
 
 
 using namespace std;
@@ -25,6 +26,8 @@ public:
     bool isComment;
     bool isBlock;
     char tempChar;
+    stack<char> xComment;
+    bool Comment;
 
 
 

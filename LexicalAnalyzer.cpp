@@ -1,10 +1,39 @@
 #include "LexicalAnalyzer.hpp"
-#include <strings.h>
-
+#include <string>
+#include <stack>
 
 
 LexicalAnalyzer::LexicalAnalyzer(string in) : input(in), charClass(ERROR), nextChar(' '), lexenum("") {
+    Comment = false;
+    Start:
+    if(xComment.empty()){
+        for(int i = 0; i < input.size(); i++){
+            if(input[i] == '/' && input[i+1] == '*'){
+                xComment.push((char) input[i]);
+                input.erase(i, 1);
+                input.erase(i, 1);
+                i = 0;
+            }
+        }
+        if(!xComment.empty())
+            goto Start;
+
+    }else{
+        for (int i = 0; i < input.size(); i++) {
+            if(input[i] == '*' && input[i+1] == '/'){
+                xComment.pop();
+                input.erase(i, 1);
+                input.erase(i, 1);
+                i = 0;
+            }
+            input.erase(i,1);
+        }
+    }
+
     printInput = in;
+    if(!xComment.empty()){
+
+    }
     getChar();
 }
 
@@ -13,7 +42,33 @@ LexicalAnalyzer::~LexicalAnalyzer() {
 
 void LexicalAnalyzer::setNewInput(string in)   {
     input = in;
+
+    Start:
+    if(xComment.empty()){
+        for(int i = 0; i < input.size(); i++){
+            if(input[i] == '/' && input[i+1] == '*'){
+                xComment.push((char) input[i]);
+                input.erase(i, 1);
+                input.erase(i, 1);
+                i = 0;
+            }
+        }
+        if(!xComment.empty())
+            goto Start;
+
+    }else{
+        for (int i = 0; i < input.size(); i++) {
+            if(input[i] == '*' && input[i+1] == '/'){
+                xComment.pop();
+                input.erase(i, 1);
+                input.erase(i, 1);
+                i = 0;
+            }
+            input.erase(i,1);
+        }
+    }
     printInput = in;
+
     getChar();
 }
 
