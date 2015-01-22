@@ -13,11 +13,9 @@ using namespace std;
 
 string tokenConverter(int t);
 
-
 int main(int argc, char **argv) {
     string filename;
     string fileLine;
-
 
     if(argc < 2){
         cout << "Invalid number of arugments entered"<<endl;
@@ -26,7 +24,6 @@ int main(int argc, char **argv) {
         filename = argv[1];
     }
 
-
     cout<<"*********** Lexical Analyzer*************"<<endl;
 
     int token = SPACE;
@@ -34,8 +31,6 @@ int main(int argc, char **argv) {
     //Read file store each line into array to be read by Analyzer   a3bc+ float 223  int++ vd3 ghg   if else  /****/ g; 12.34
    ifstream FILE(filename);
     getline(FILE, fileLine);
-
-
 
     LexicalAnalyzer LA(fileLine);
     if(FILE.is_open()){
@@ -62,15 +57,8 @@ int main(int argc, char **argv) {
         cout << "Unable to open " << filename <<endl;
     }
 
-    //Stop program at end of file
-
-
-    //Parse each line into tokens
-
     End:
     return 0;
-
-
 }
 
 string tokenConverter(int t){

@@ -57,6 +57,29 @@ void LexicalAnalyzer::getChar(){
     } else{
         nextChar = '$';
     }
+    if(nextChar == '/' && input[0] == '*'){
+        xComment.push(1);
+        goto Start;
+
+    }
+
+    if(xComment.empty() == false && nextChar != '$'){
+
+        if(nextChar == '*' && input[0] == '/'){
+            xComment.pop();
+            nextChar= input[0];
+            input.erase(0, 1);
+
+        }else{
+            if(nextChar == '/' && input[0] == '*'){
+                xComment.push(1);
+                nextChar == input[0];
+                input.erase(0, 1);
+            }
+        }
+        goto Start;
+
+    }
 
     charClass = ERROR;
 
@@ -84,7 +107,13 @@ void LexicalAnalyzer::getChar(){
                     getChar();
                 }
                 getChar();
+            }else{
+
+                charClass = SYMBOL;
+
             }
+
+
         }else{
 
             charClass = SYMBOL;
@@ -95,7 +124,7 @@ void LexicalAnalyzer::getChar(){
 }
 
 void LexicalAnalyzer::addChar() {
-    lexenum +=nextChar;
+    lexenum += nextChar;
 }
 
 int LexicalAnalyzer::lex() {
@@ -139,6 +168,5 @@ int LexicalAnalyzer::lex() {
             getChar();
             return SYMBOL;
             break;
-
     }
 }

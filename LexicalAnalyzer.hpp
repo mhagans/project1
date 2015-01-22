@@ -7,13 +7,9 @@
 #include <fstream>
 #include <stack>
 
-
 using namespace std;
 
 enum {DIGIT, LETTER, KEYWORD, ID, INT, FLOAT, ERROR, SPACE, STOP, SYMBOL};
-
-
-
 
 class LexicalAnalyzer{
 
@@ -26,10 +22,6 @@ public:
     char tempChar;
     stack<int> xComment;
 
-
-
-
-
 private:
     string input;
 
@@ -41,11 +33,11 @@ public:
     LexicalAnalyzer(string in="");
     void linePrint();
     virtual ~LexicalAnalyzer();
+    bool exitComment;
 
 private:
     void addChar();
     void getChar();
 };
-
 
 #endif
