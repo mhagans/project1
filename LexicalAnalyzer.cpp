@@ -4,9 +4,6 @@
 
 
 LexicalAnalyzer::LexicalAnalyzer(string in) : input(in), charClass(ERROR), nextChar(' '), lexenum("") {
-    Comment = false;
-    test = 0;
-
 
     printInput = in;
     getChar();
@@ -53,23 +50,16 @@ bool LexicalAnalyzer::isSymbol() {
 
 void LexicalAnalyzer::getChar(){
 
-
+    Start:
     if(input.size() > 0) {
         nextChar = input[0];
         input.erase(0, 1);
     } else{
         nextChar = '$';
     }
-    Start:
-
-    if(xComment.size() != 0 && nextChar != '$'){
-        goto Block;
-    }
-
 
     charClass = ERROR;
-    isComment = false;
-    isBlock = false;
+
 
     if((nextChar > 64 && nextChar < 91) || (nextChar > 96 && nextChar < 123))
         charClass = LETTER;
@@ -94,43 +84,6 @@ void LexicalAnalyzer::getChar(){
                     getChar();
                 }
                 getChar();
-            }else{
-
-
-                if(nextChar == '/' && input[0] == '*'){
-
-
-                    xComment.push(1);
-                    Block:
-                    //getChar();
-
-                        test = xComment.size();
-                    if(test == 0)
-                        goto Start;
-                    while(test != 0){
-                        test = xComment.size();
-                        if(test == 0)
-                            goto Block;
-                        if(nextChar == '*' && input[0] == '/'){
-                            xComment.pop();
-                            input.erase(0,1);
-                        }else{
-                            if(test > 1){
-                                if(nextChar == '/' && input[0] == '*'){
-                                    xComment.push('/');
-
-                                }
-                            }
-
-                        }
-                        getChar();
-                    }
-
-
-                }else{
-                    charClass = SYMBOL;
-                }
-
             }
         }else{
 

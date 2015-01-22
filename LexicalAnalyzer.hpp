@@ -23,12 +23,9 @@ public:
     string lexenum;
     string printInput;
     string sKeywords [7] = {"if", "else", "int", "float", "return", "void", "while"};
-    bool isComment;
-    bool isBlock;
     char tempChar;
     stack<int> xComment;
-    bool Comment;
-    unsigned int test;
+
 
 
 
