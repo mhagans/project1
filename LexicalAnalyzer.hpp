@@ -26,8 +26,9 @@ public:
     bool isComment;
     bool isBlock;
     char tempChar;
-    stack<char> xComment;
+    stack<int> xComment;
     bool Comment;
+    unsigned int test;
 
 
 

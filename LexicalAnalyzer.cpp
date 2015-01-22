@@ -5,35 +5,10 @@
 
 LexicalAnalyzer::LexicalAnalyzer(string in) : input(in), charClass(ERROR), nextChar(' '), lexenum("") {
     Comment = false;
-    Start:
-    if(xComment.empty()){
-        for(int i = 0; i < input.size(); i++){
-            if(input[i] == '/' && input[i+1] == '*'){
-                xComment.push((char) input[i]);
-                input.erase(i, 1);
-                input.erase(i, 1);
-                i = 0;
-            }
-        }
-        if(!xComment.empty())
-            goto Start;
+    test = 0;
 
-    }else{
-        for (int i = 0; i < input.size(); i++) {
-            if(input[i] == '*' && input[i+1] == '/'){
-                xComment.pop();
-                input.erase(i, 1);
-                input.erase(i, 1);
-                i = 0;
-            }
-            input.erase(i,1);
-        }
-    }
 
     printInput = in;
-    if(!xComment.empty()){
-
-    }
     getChar();
 }
 
@@ -42,33 +17,7 @@ LexicalAnalyzer::~LexicalAnalyzer() {
 
 void LexicalAnalyzer::setNewInput(string in)   {
     input = in;
-
-    Start:
-    if(xComment.empty()){
-        for(int i = 0; i < input.size(); i++){
-            if(input[i] == '/' && input[i+1] == '*'){
-                xComment.push((char) input[i]);
-                input.erase(i, 1);
-                input.erase(i, 1);
-                i = 0;
-            }
-        }
-        if(!xComment.empty())
-            goto Start;
-
-    }else{
-        for (int i = 0; i < input.size(); i++) {
-            if(input[i] == '*' && input[i+1] == '/'){
-                xComment.pop();
-                input.erase(i, 1);
-                input.erase(i, 1);
-                i = 0;
-            }
-            input.erase(i,1);
-        }
-    }
     printInput = in;
-
     getChar();
 }
 
@@ -104,12 +53,19 @@ bool LexicalAnalyzer::isSymbol() {
 
 void LexicalAnalyzer::getChar(){
 
+
     if(input.size() > 0) {
         nextChar = input[0];
         input.erase(0, 1);
     } else{
         nextChar = '$';
     }
+    Start:
+
+    if(xComment.size() != 0 && nextChar != '$'){
+        goto Block;
+    }
+
 
     charClass = ERROR;
     isComment = false;
@@ -128,28 +84,60 @@ void LexicalAnalyzer::getChar(){
         charClass = STOP;
 
     if(isSymbol()){
-        if(nextChar == '/'){
-            tempChar = input[0];
 
-            if(nextChar == '/' && tempChar == '/'){
-                isComment = true;
+        if(nextChar == '/'){
+
+
+            if(nextChar == '/' && input[0] == '/'){
                 Inline:
                 while(input.size() > 0){
                     getChar();
                 }
-                isComment = false;
                 getChar();
             }else{
-                charClass = SYMBOL;
+
+
+                if(nextChar == '/' && input[0] == '*'){
+
+
+                    xComment.push(1);
+                    Block:
+                    //getChar();
+
+                        test = xComment.size();
+                    if(test == 0)
+                        goto Start;
+                    while(test != 0){
+                        test = xComment.size();
+                        if(test == 0)
+                            goto Block;
+                        if(nextChar == '*' && input[0] == '/'){
+                            xComment.pop();
+                            input.erase(0,1);
+                        }else{
+                            if(test > 1){
+                                if(nextChar == '/' && input[0] == '*'){
+                                    xComment.push('/');
+
+                                }
+                            }
+
+                        }
+                        getChar();
+                    }
+
+
+                }else{
+                    charClass = SYMBOL;
+                }
+
             }
         }else{
+
             charClass = SYMBOL;
         }
 
     }
-
-
-
 
 }
 
