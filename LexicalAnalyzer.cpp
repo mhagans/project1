@@ -61,7 +61,7 @@ void LexicalAnalyzer::getChar(){
         xComment.push(1);
         currentChar == input[0];
         input.erase(0, 1);
-        goto Start;
+        getChar();
 
     }
 
@@ -79,7 +79,7 @@ void LexicalAnalyzer::getChar(){
                 input.erase(0, 1);
             }
         }
-        goto Start;
+        getChar();
 
     }
 
@@ -98,10 +98,7 @@ void LexicalAnalyzer::getChar(){
     if(currentChar == '$')
         charClass = STOP;
 
-    if(currentChar == '(' || currentChar == ')' || currentChar == ',' || currentChar =='{' || currentChar == '}' ||
-            currentChar == ';' || currentChar == '[' || currentChar == ']' ||
-            currentChar == ':' || currentChar == '+' || currentChar == '-' || currentChar == '*' || currentChar == '/' || currentChar == '=' ||
-            currentChar == '<' || currentChar == '>' || currentChar == '!'){
+    if(isSymbol()){
 
         if(currentChar == '/'){
 
@@ -163,9 +160,16 @@ int LexicalAnalyzer::lex() {
             getChar();
             while (charClass == DIGIT) {
                 addChar();
-                getChar();
+                if(input[0] == '.'){
+                    addChar();
+                    getChar();
+                }else{
+                    getChar();
+                }
+
                 // This will be to check for a float
             }
+
             return INT;
             break;
         case SYMBOL:

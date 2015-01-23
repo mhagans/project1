@@ -19,7 +19,7 @@ public:
     string lexenum;
     string printInput;
     string sKeywords [7] = {"if", "else", "int", "float", "return", "void", "while"};
-    char tempChar;
+    bool isFloat;
     stack<int> xComment;
 
 private:

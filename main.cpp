@@ -45,6 +45,7 @@ int main(int argc, char **argv) {
                     }
 
                 }
+            cout << endl;
             getline(FILE, fileLine);
 
             LA.setNewInput(fileLine);
