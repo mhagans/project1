@@ -3,7 +3,7 @@
 #include <stack>
 
 
-LexicalAnalyzer::LexicalAnalyzer(string in) : input(in), charClass(ERROR), nextChar(' '), lexenum("") {
+LexicalAnalyzer::LexicalAnalyzer(string in) : input(in), charClass(ERROR), currentChar(' '), lexenum("") {
 
     printInput = in;
     getChar();
@@ -39,10 +39,10 @@ bool LexicalAnalyzer::isKeyword(string in){
 
 bool LexicalAnalyzer::isSymbol() {
     bool symbol = false;
-    if (nextChar == '(' || nextChar == ')' || nextChar == ',' || nextChar =='{' || nextChar == '}' ||
-            nextChar == ';' || nextChar == '[' || nextChar == ']' ||
-            nextChar == ':' || nextChar == '+' || nextChar == '-' || nextChar == '*' || nextChar == '/' || nextChar == '=' ||
-            nextChar == '<' || nextChar == '>' || nextChar == '!'){
+    if (currentChar == '(' || currentChar == ')' || currentChar == ',' || currentChar =='{' || currentChar == '}' ||
+            currentChar == ';' || currentChar == '[' || currentChar == ']' ||
+            currentChar == ':' || currentChar == '+' || currentChar == '-' || currentChar == '*' || currentChar == '/' || currentChar == '=' ||
+            currentChar == '<' || currentChar == '>' || currentChar == '!'){
         symbol = true;
     }
     return symbol;
@@ -52,28 +52,30 @@ void LexicalAnalyzer::getChar(){
 
     Start:
     if(input.size() > 0) {
-        nextChar = input[0];
+        currentChar = input[0];
         input.erase(0, 1);
     } else{
-        nextChar = '$';
+        currentChar = '$';
     }
-    if(nextChar == '/' && input[0] == '*'){
+    if(currentChar == '/' && input[0] == '*'){
         xComment.push(1);
+        currentChar == input[0];
+        input.erase(0, 1);
         goto Start;
 
     }
 
-    if(xComment.empty() == false && nextChar != '$'){
+    if(xComment.empty() == false && currentChar != '$'){
 
-        if(nextChar == '*' && input[0] == '/'){
+        if(currentChar == '*' && input[0] == '/'){
             xComment.pop();
-            nextChar= input[0];
+            currentChar = input[0];
             input.erase(0, 1);
 
         }else{
-            if(nextChar == '/' && input[0] == '*'){
+            if(currentChar == '/' && input[0] == '*'){
                 xComment.push(1);
-                nextChar == input[0];
+                currentChar == input[0];
                 input.erase(0, 1);
             }
         }
@@ -84,24 +86,27 @@ void LexicalAnalyzer::getChar(){
     charClass = ERROR;
 
 
-    if((nextChar > 64 && nextChar < 91) || (nextChar > 96 && nextChar < 123))
+    if((currentChar > 64 && currentChar < 91) || (currentChar > 96 && currentChar < 123))
         charClass = LETTER;
 
-    if(nextChar > 47 && nextChar < 58)
+    if(currentChar > 47 && currentChar < 58)
         charClass = DIGIT;
 
-    if(nextChar == ' ')
+    if(currentChar == ' ')
         charClass = SPACE;
 
-    if(nextChar == '$')
+    if(currentChar == '$')
         charClass = STOP;
 
-    if(isSymbol()){
+    if(currentChar == '(' || currentChar == ')' || currentChar == ',' || currentChar =='{' || currentChar == '}' ||
+            currentChar == ';' || currentChar == '[' || currentChar == ']' ||
+            currentChar == ':' || currentChar == '+' || currentChar == '-' || currentChar == '*' || currentChar == '/' || currentChar == '=' ||
+            currentChar == '<' || currentChar == '>' || currentChar == '!'){
 
-        if(nextChar == '/'){
+        if(currentChar == '/'){
 
 
-            if(nextChar == '/' && input[0] == '/'){
+            if(currentChar == '/' && input[0] == '/'){
                 Inline:
                 while(input.size() > 0){
                     getChar();
@@ -124,7 +129,7 @@ void LexicalAnalyzer::getChar(){
 }
 
 void LexicalAnalyzer::addChar() {
-    lexenum += nextChar;
+    lexenum += currentChar;
 }
 
 int LexicalAnalyzer::lex() {

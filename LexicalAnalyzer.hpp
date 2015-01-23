@@ -14,7 +14,7 @@ enum {DIGIT, LETTER, KEYWORD, ID, INT, FLOAT, ERROR, SPACE, STOP, SYMBOL};
 class LexicalAnalyzer{
 
 public:
-    char nextChar;
+    char currentChar;
     int charClass;
     string lexenum;
     string printInput;
