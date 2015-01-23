@@ -4,3 +4,6 @@ Marcus Hagans
 Due: 1/22/15
 Submitted:
 
+Scope:
+The project requires the use of the grammer definitions in the appendix of "Compilier Construction Principles and Practice" book inorder to construct a lexical analyzer.
+The lexical analyzer will return tokens
