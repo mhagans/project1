@@ -18,7 +18,7 @@ public:
     int charClass;
     string lexenum;
     string printInput;
-    string sKeywords [7] = {"if", "else", "int", "float", "return", "void", "while"};
+    string sKeywords [7];
     bool isFloat;
     stack<int> xComment;
 

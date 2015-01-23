@@ -6,6 +6,13 @@
 LexicalAnalyzer::LexicalAnalyzer(string in) : input(in), charClass(ERROR), currentChar(' '), lexenum("") {
 
     printInput = in;
+    sKeywords[0] = "if";
+    sKeywords[1] = "else";
+    sKeywords[2] = "int";
+    sKeywords[3] = "float";
+    sKeywords[4] = "return";
+    sKeywords[5] = "void";
+    sKeywords[6] = "while";
     getChar();
 }
 
