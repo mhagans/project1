@@ -161,7 +161,9 @@ int LexicalAnalyzer::lex() {
             while (charClass == DIGIT) {
                 addChar();
                 if(input[0] == '.'){
-                    addChar();
+                    lexenum += input[0];
+                    input.erase(0, 1);
+                    isFloat = true;
                     getChar();
                 }else{
                     getChar();
@@ -169,8 +171,13 @@ int LexicalAnalyzer::lex() {
 
                 // This will be to check for a float
             }
+            if(isFloat){
+                isFloat = false;
+                return FLOAT;
+            }else{
+                return INT;
+            }
 
-            return INT;
             break;
         case SYMBOL:
             addChar();
