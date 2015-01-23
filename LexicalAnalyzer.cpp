@@ -1,8 +1,8 @@
 #include "LexicalAnalyzer.hpp"
-#include <string>
-#include <stack>
 
 
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "OCDFAInspection"
 LexicalAnalyzer::LexicalAnalyzer(string in) : input(in), charClass(ERROR), currentChar(' '), lexenum("") {
 
     printInput = in;
@@ -50,7 +50,6 @@ bool LexicalAnalyzer::isSymbol() {
 
 void LexicalAnalyzer::getChar(){
 
-    Start:
     if(input.size() > 0) {
         currentChar = input[0];
         input.erase(0, 1);
@@ -59,23 +58,21 @@ void LexicalAnalyzer::getChar(){
     }
     if(currentChar == '/' && input[0] == '*'){
         xComment.push(1);
-        currentChar == input[0];
         input.erase(0, 1);
         getChar();
 
     }
 
-    if(xComment.empty() == false && currentChar != '$'){
+    if (!xComment.empty() && currentChar != '$') {
 
-        if(currentChar == '*' && input[0] == '/'){
+        if (currentChar == '*' && input[0] == '/') {
             xComment.pop();
             currentChar = input[0];
             input.erase(0, 1);
 
-        }else{
-            if(currentChar == '/' && input[0] == '*'){
+        } else {
+            if (currentChar == '/' && input[0] == '*') {
                 xComment.push(1);
-                currentChar == input[0];
                 input.erase(0, 1);
             }
         }
@@ -104,7 +101,6 @@ void LexicalAnalyzer::getChar(){
 
 
             if(currentChar == '/' && input[0] == '/'){
-                Inline:
                 while(input.size() > 0){
                     getChar();
                 }
@@ -184,5 +180,8 @@ int LexicalAnalyzer::lex() {
             getChar();
             return SYMBOL;
             break;
+        default:break;
     }
+    return 0;
 }
+#pragma clang diagnostic pop

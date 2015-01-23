@@ -33,7 +33,6 @@ public:
     LexicalAnalyzer(string in="");
     void linePrint();
     virtual ~LexicalAnalyzer();
-    bool exitComment;
 
 private:
     void addChar();

@@ -1,12 +1,10 @@
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "OCDFAInspection"
 #if !defined(P1)
-#define _P1_
 
 #include <iostream>
 #include <fstream>
-#include <conio.h>
-#include <ctype.h>
 #include <regex>
-#include "string"
 #include "LexicalAnalyzer.hpp"
 
 using namespace std;
@@ -58,7 +56,6 @@ int main(int argc, char **argv) {
         cout << "Unable to open " << filename <<endl;
     }
 
-    End:
     return 0;
 }
 
@@ -92,3 +89,4 @@ string tokenConverter(int t){
 }
 
 #endif
+#pragma clang diagnostic pop
