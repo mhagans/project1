@@ -39,7 +39,12 @@ int main(int argc, char **argv) {
                     token = LA.lex();
                     if(token == STOP){
                     }else{
-                        cout << tokenConverter(token) <<":\t" <<LA.lexenum<< endl;
+                        if(token == ID){
+                            cout << tokenConverter(token) <<":\t" <<LA.lexenum<< " DEPTH: " << LA.depth << endl;
+                        }else{
+                            cout << tokenConverter(token) <<":\t" <<LA.lexenum<< endl;
+                        }
+
                     }
 
                 }

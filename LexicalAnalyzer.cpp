@@ -6,6 +6,7 @@
 LexicalAnalyzer::LexicalAnalyzer(string in) : input(in), charClass(ERROR), currentChar(' '), lexenum("") {
 
     printInput = in;
+    depth = 0;
     getChar();
 }
 
@@ -31,7 +32,6 @@ bool LexicalAnalyzer::isKeyword(string in){
             keyword = true;
             break;
         }
-
     }
     return keyword;
 
@@ -43,6 +43,12 @@ bool LexicalAnalyzer::isSymbol() {
             currentChar == ';' || currentChar == '[' || currentChar == ']' ||
             currentChar == ':' || currentChar == '+' || currentChar == '-' || currentChar == '*' || currentChar == '/' || currentChar == '=' ||
             currentChar == '<' || currentChar == '>' || currentChar == '!'){
+        if(currentChar == '{'){
+           depth++;
+        }
+        if(currentChar == '}'){
+            depth--;
+        }
         symbol = true;
     }
     return symbol;
@@ -99,7 +105,6 @@ void LexicalAnalyzer::getChar(){
 
         if(currentChar == '/'){
 
-
             if(currentChar == '/' && input[0] == '/'){
                 while(input.size() > 0){
                     getChar();
@@ -154,18 +159,48 @@ int LexicalAnalyzer::lex() {
         case DIGIT:
             addChar();
             getChar();
-            while (charClass == DIGIT) {
+            if(currentChar == '.'){
                 addChar();
-                if(input[0] == '.'){
-                    lexenum += input[0];
-                    input.erase(0, 1);
+                isFloat = true;
+                getChar();
+                if(currentChar == 'E'){
+                    addChar();
                     isFloat = true;
                     getChar();
-                }else{
+                    if(currentChar == '+' || currentChar == '-'){
+                        addChar();
+                        getChar();
+                    }
+                }
+            }
+            if(currentChar == 'E'){
+                addChar();
+                isFloat = true;
+                getChar();
+                if(currentChar == '+' || currentChar == '-'){
+                    addChar();
                     getChar();
                 }
+            }
 
-                // This will be to check for a float
+            while (charClass == DIGIT) {
+                addChar();
+                getChar();
+                if(currentChar == '.'){
+                    addChar();
+                    isFloat = true;
+                    getChar();
+                }
+                if(currentChar == 'E'){
+                    addChar();
+                    isFloat = true;
+                    getChar();
+                    if(currentChar == '+' || currentChar == '-'){
+                        addChar();
+                        getChar();
+                    }
+                }
+
             }
             if(isFloat){
                 isFloat = false;
