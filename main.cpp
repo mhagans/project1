@@ -26,7 +26,7 @@ int main(int argc, char **argv) {
     int token = SPACE;
 
     //Read file store each line into array to be read by Analyzer   a3bc+ float 223  int++ vd3 ghg   if else  /****/ g; 12.34
-   ifstream FILE(filename);
+   ifstream FILE(filename.c_str());
     getline(FILE, fileLine);
 
     LexicalAnalyzer LA(fileLine);

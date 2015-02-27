@@ -7,6 +7,13 @@ LexicalAnalyzer::LexicalAnalyzer(string in) : input(in), charClass(ERROR), curre
 
     printInput = in;
     depth = 0;
+    sKeywords [0] = "if";
+    sKeywords [1] = "else";
+    sKeywords [2] ="int";
+    sKeywords [3] = "return";
+    sKeywords [4] = "void";
+    sKeywords [5] = "while";
+    sKeywords [6] = "float";
     getChar();
 }
 
@@ -44,6 +51,7 @@ bool LexicalAnalyzer::isSymbol() {
             currentChar == ':' || currentChar == '+' || currentChar == '-' || currentChar == '*' || currentChar == '/' || currentChar == '=' ||
             currentChar == '<' || currentChar == '>' || currentChar == '!'){
         if(currentChar == '{'){
+
            depth++;
         }
         if(currentChar == '}'){
@@ -133,7 +141,6 @@ void LexicalAnalyzer::addChar() {
 int LexicalAnalyzer::lex() {
     lexenum = "";
 
-
     while (charClass == SPACE) getChar();
 
     if (charClass == ERROR){
@@ -159,6 +166,7 @@ int LexicalAnalyzer::lex() {
         case DIGIT:
             addChar();
             getChar();
+            isFloat = false;
             if(currentChar == '.'){
                 addChar();
                 isFloat = true;
@@ -211,8 +219,44 @@ int LexicalAnalyzer::lex() {
 
             break;
         case SYMBOL:
-            addChar();
-            getChar();
+            if(currentChar == '<'){
+                addChar();
+                getChar();
+                if(currentChar == '='){
+                    addChar();
+                    getChar();
+                }
+            } else{
+                if(currentChar == '>'){
+                    addChar();
+                    getChar();
+                    if(currentChar == '='){
+                        addChar();
+                        getChar();
+                    }
+                }else{
+                    if (currentChar == '='){
+                        addChar();
+                        getChar();
+                        if(currentChar == '='){
+                            addChar();
+                            getChar();
+                        }
+                    }else{
+                        if(currentChar == '!'){
+                            addChar();
+                            getChar();
+                            if(currentChar == '='){
+                                addChar();
+                                getChar();
+                            }
+                        }else{
+                            addChar();
+                            getChar();
+                        }
+                    }
+                }
+            }
             return SYMBOL;
             break;
         default:break;
