@@ -5,5 +5,580 @@ Due: 1/22/15
 Submitted:
 
 Scope:
-The project requires the use of the grammer definitions in the appendix of "Compilier Construction Principles and Practice" book inorder to construct a lexical analyzer.
-The lexical analyzer will return tokens
+The project requires the use of the grammar definitions in the appendix of "Compiler Construction Principles and Practice" book in-order to construct a lexical analyzer.
+The lexical analyzer will return tokens that will later be used for the parser.
+
+Program Requirements:
+0) the project's general goal is to construct a list of tokens capable
+   of being passed to a parser.
+1) comments should be totally ignored, not passed to the parser and
+   not reported.
+2) comments might be nested.
+3) one line comments are designated by //
+4) multiple line comments are designated by /* followed by */ in 
+   a match up fashion for the nesting.
+5) a symbol table* for identifiers should be constructed (as
+   per recommendation of your text, I actually recommend
+   construction of the symbol table during parsing).
+   a) the symbol table should keep track of the identifier
+   b) be extensible
+   c) keep track of scope
+   d) be constructed efficiently
+   * this will not be evaluated until project 3
+6) upon reporting of identifiers, their nesting depth/declarations
+   should be displayed.
+   
+How to run program:
+Program consist of four files: LexicalAnalyzer.cpp, LexicalAnalyzer.hpp, makefile, and main.cpp that have been sharred into a file called project1 unshar it obtain the four files.  Type in "make" at the command line, which will create a executable file named p1.  Then enter either ./p1 fn or p1 fn where fn is the file you will used for the Analyzer.
+
+The program will go line by line and create tokens for each line as necessary. Below is sample outputs:
+
+test1:
+*********** Lexical Analyzer*************
+INPUT: /**/          /*/* */   */
+
+INPUT: /*/*/****This**********/*/    */
+
+INPUT: /**************/
+
+INPUT: /*************************
+
+INPUT: i = 333;        ******************/       */
+SYMBOL:	*
+SYMBOL:	/
+
+INPUT: // Inline comment
+
+INPUT: iiii = 3@33;
+ID:	iiii DEPTH: 0
+SYMBOL:	=
+FLOAT:	3
+ERROR:	@
+INT:	33
+SYMBOL:	;
+
+INPUT: 12.43
+FLOAT:	12.43
+
+INPUT: 2.5
+FLOAT:	2.5
+
+INPUT: 2E5
+FLOAT:	2E5
+
+INPUT: 2.5E5
+FLOAT:	2.5E5
+
+INPUT: 2.5E+5
+FLOAT:	2.5E+5
+
+INPUT: 2.5E-5
+FLOAT:	2.5E-5
+
+INPUT: 2E+5
+FLOAT:	2E+5
+
+INPUT: 2E-5
+FLOAT:	2E-5
+
+INPUT: .25
+ERROR:	.
+INT:	25
+
+INPUT: int g 4 cd (int u, int v)      {
+ID:	int DEPTH: 0
+ID:	g DEPTH: 0
+INT:	4
+ID:	cd DEPTH: 0
+SYMBOL:	(
+ID:	int DEPTH: 0
+ID:	u DEPTH: 0
+SYMBOL:	,
+ID:	int DEPTH: 0
+ID:	v DEPTH: 0
+SYMBOL:	)
+SYMBOL:	{
+
+INPUT: if(v == >= 0){ return/*a comment*/ u;
+ID:	if DEPTH: 1
+SYMBOL:	(
+ID:	v DEPTH: 1
+SYMBOL:	=
+SYMBOL:	=
+SYMBOL:	>
+SYMBOL:	=
+INT:	0
+SYMBOL:	)
+SYMBOL:	{
+ID:	return DEPTH: 2
+ID:	u DEPTH: 2
+SYMBOL:	;
+
+INPUT: }else ret_urn gcd(vxxxxxxvvvvv, u-u/v*v);
+SYMBOL:	}
+ID:	else DEPTH: 1
+ID:	ret DEPTH: 1
+ERROR:	_
+ID:	urn DEPTH: 1
+ID:	gcd DEPTH: 1
+SYMBOL:	(
+ID:	vxxxxxxvvvvv DEPTH: 1
+SYMBOL:	,
+ID:	u DEPTH: 1
+SYMBOL:	-
+ID:	u DEPTH: 1
+SYMBOL:	/
+ID:	v DEPTH: 1
+SYMBOL:	*
+ID:	v DEPTH: 1
+SYMBOL:	)
+SYMBOL:	;
+
+INPUT:        /* u-u/v*v == u mod v*/
+
+INPUT: !
+SYMBOL:	!
+
+INPUT: }
+SYMBOL:	}
+
+INPUT: return void while       void main()
+ID:	return DEPTH: 0
+ID:	void DEPTH: 0
+ID:	while DEPTH: 0
+ID:	void DEPTH: 0
+ID:	main DEPTH: 0
+SYMBOL:	(
+SYMBOL:	)
+
+test2:
+*********** Lexical Analyzer*************
+INPUT: /* A program to perform Euclid's
+
+INPUT:    Algorithm to compute gcd. */
+
+INPUT: 
+
+INPUT: int gcd (int u, int v)
+KEYWORD:        int
+ID:     gcd DEPTH: 0
+SYMBOL: (
+KEYWORD:        int
+ID:     u DEPTH: 0
+SYMBOL: ,
+KEYWORD:        int
+ID:     v DEPTH: 0
+SYMBOL: )
+
+INPUT: { if (v == 0) return u;
+SYMBOL: {
+KEYWORD:        if
+SYMBOL: (
+ID:     v DEPTH: 1
+SYMBOL: =
+SYMBOL: =
+FLOAT:  0
+SYMBOL: )
+KEYWORD:        return
+ID:     u DEPTH: 1
+SYMBOL: ;
+
+INPUT:   else return gcd(v,u-u/v*v);
+KEYWORD:        else
+KEYWORD:        return
+ID:     gcd DEPTH: 1
+SYMBOL: (
+ID:     v DEPTH: 1
+SYMBOL: ,
+ID:     u DEPTH: 1
+SYMBOL: -
+ID:     u DEPTH: 1
+SYMBOL: /
+ID:     v DEPTH: 1
+SYMBOL: *
+ID:     v DEPTH: 1
+SYMBOL: )
+SYMBOL: ;
+
+INPUT:   /* u-u/v*v == u mod v */
+
+INPUT: }
+SYMBOL: }
+
+INPUT: 
+
+INPUT: void main(void)
+KEYWORD:        void
+ID:     main DEPTH: 0
+SYMBOL: (
+KEYWORD:        void
+SYMBOL: )
+
+INPUT: { int x; int y;
+SYMBOL: {
+KEYWORD:        int
+ID:     x DEPTH: 1
+SYMBOL: ;
+KEYWORD:        int
+ID:     y DEPTH: 1
+SYMBOL: ;
+
+INPUT:   x = input(); y = input();
+ID:     x DEPTH: 1
+SYMBOL: =
+ID:     input DEPTH: 1
+SYMBOL: (
+SYMBOL: )
+SYMBOL: ;
+ID:     y DEPTH: 1
+SYMBOL: =
+ID:     input DEPTH: 1
+SYMBOL: (
+SYMBOL: )
+SYMBOL: ;
+
+INPUT:   output(gcd(x,y));
+ID:     output DEPTH: 1
+SYMBOL: (
+ID:     gcd DEPTH: 1
+SYMBOL: (
+ID:     x DEPTH: 1
+SYMBOL: ,
+ID:     y DEPTH: 1
+SYMBOL: )
+SYMBOL: )
+SYMBOL: ;
+
+INPUT: }
+SYMBOL: }
+
+test3:
+
+*********** Lexical Analyzer*************
+INPUT: /* A program to perform selection sort on a 10
+
+INPUT:    element array. */
+
+INPUT: 
+
+INPUT: int x[10];
+KEYWORD:        int
+ID:     x DEPTH: 0
+SYMBOL: [
+FLOAT:  10
+SYMBOL: ]
+SYMBOL: ;
+
+INPUT: 
+
+INPUT: int minloc ( int a[], int low, int high )
+KEYWORD:        int
+ID:     minloc DEPTH: 0
+SYMBOL: (
+KEYWORD:        int
+ID:     a DEPTH: 0
+SYMBOL: [
+SYMBOL: ]
+SYMBOL: ,
+KEYWORD:        int
+ID:     low DEPTH: 0
+SYMBOL: ,
+KEYWORD:        int
+ID:     high DEPTH: 0
+SYMBOL: )
+
+INPUT: { int i; int x; int k;
+SYMBOL: {
+KEYWORD:        int
+ID:     i DEPTH: 1
+SYMBOL: ;
+KEYWORD:        int
+ID:     x DEPTH: 1
+SYMBOL: ;
+KEYWORD:        int
+ID:     k DEPTH: 1
+SYMBOL: ;
+
+INPUT:   k = low;
+ID:     k DEPTH: 1
+SYMBOL: =
+ID:     low DEPTH: 1
+SYMBOL: ;
+
+INPUT:   x = a[low];
+ID:     x DEPTH: 1
+SYMBOL: =
+ID:     a DEPTH: 1
+SYMBOL: [
+ID:     low DEPTH: 1
+SYMBOL: ]
+SYMBOL: ;
+
+INPUT:   i = low + 1;
+ID:     i DEPTH: 1
+SYMBOL: =
+ID:     low DEPTH: 1
+SYMBOL: +
+INT:    1
+SYMBOL: ;
+
+INPUT:   while (i < high)
+KEYWORD:        while
+SYMBOL: (
+ID:     i DEPTH: 1
+SYMBOL: <
+ID:     high DEPTH: 1
+SYMBOL: )
+
+INPUT:   { if (a[i] < x)
+SYMBOL: {
+KEYWORD:        if
+SYMBOL: (
+ID:     a DEPTH: 2
+SYMBOL: [
+ID:     i DEPTH: 2
+SYMBOL: ]
+SYMBOL: <
+ID:     x DEPTH: 2
+SYMBOL: )
+
+INPUT:     { x = a[i];
+SYMBOL: {
+ID:     x DEPTH: 3
+SYMBOL: =
+ID:     a DEPTH: 3
+SYMBOL: [
+ID:     i DEPTH: 3
+SYMBOL: ]
+SYMBOL: ;
+
+INPUT:       k = i; }
+ID:     k DEPTH: 3
+SYMBOL: =
+ID:     i DEPTH: 3
+SYMBOL: ;
+SYMBOL: }
+
+INPUT:     i = i + 1;
+ID:     i DEPTH: 2
+SYMBOL: =
+ID:     i DEPTH: 2
+SYMBOL: +
+INT:    1
+SYMBOL: ;
+
+INPUT:   }
+SYMBOL: }
+
+INPUT:  return k;
+KEYWORD:        return
+ID:     k DEPTH: 1
+SYMBOL: ;
+
+INPUT: }
+SYMBOL: }
+
+INPUT: 
+
+INPUT: void sort( int a[], int low, int high)
+KEYWORD:        void
+ID:     sort DEPTH: 0
+SYMBOL: (
+KEYWORD:        int
+ID:     a DEPTH: 0
+SYMBOL: [
+SYMBOL: ]
+SYMBOL: ,
+KEYWORD:        int
+ID:     low DEPTH: 0
+SYMBOL: ,
+KEYWORD:        int
+ID:     high DEPTH: 0
+SYMBOL: )
+
+INPUT: { int i ; int k;
+SYMBOL: {
+KEYWORD:        int
+ID:     i DEPTH: 1
+SYMBOL: ;
+KEYWORD:        int
+ID:     k DEPTH: 1
+SYMBOL: ;
+
+INPUT:   i = low;
+ID:     i DEPTH: 1
+SYMBOL: =
+ID:     low DEPTH: 1
+SYMBOL: ;
+
+INPUT:   while (i < high -1)
+KEYWORD:        while
+SYMBOL: (
+ID:     i DEPTH: 1
+SYMBOL: <
+ID:     high DEPTH: 1
+SYMBOL: -
+INT:    1
+SYMBOL: )
+
+INPUT:   { int t;
+SYMBOL: {
+KEYWORD:        int
+ID:     t DEPTH: 2
+SYMBOL: ;
+
+INPUT:     k = minloc(a,i,high);
+ID:     k DEPTH: 2
+SYMBOL: =
+ID:     minloc DEPTH: 2
+SYMBOL: (
+ID:     a DEPTH: 2
+SYMBOL: ,
+ID:     i DEPTH: 2
+SYMBOL: ,
+ID:     high DEPTH: 2
+SYMBOL: )
+SYMBOL: ;
+
+INPUT:     t = a[k];
+ID:     t DEPTH: 2
+SYMBOL: =
+ID:     a DEPTH: 2
+SYMBOL: [
+ID:     k DEPTH: 2
+SYMBOL: ]
+SYMBOL: ;
+
+INPUT:     a[k] = a[i];
+ID:     a DEPTH: 2
+SYMBOL: [
+ID:     k DEPTH: 2
+SYMBOL: ]
+SYMBOL: =
+ID:     a DEPTH: 2
+SYMBOL: [
+ID:     i DEPTH: 2
+SYMBOL: ]
+SYMBOL: ;
+
+INPUT:     a[i] = t;
+ID:     a DEPTH: 2
+SYMBOL: [
+ID:     i DEPTH: 2
+SYMBOL: ]
+SYMBOL: =
+ID:     t DEPTH: 2
+SYMBOL: ;
+
+INPUT:     i = i + 1;
+ID:     i DEPTH: 2
+SYMBOL: =
+ID:     i DEPTH: 2
+SYMBOL: +
+INT:    1
+SYMBOL: ;
+
+INPUT:   }
+SYMBOL: }
+
+INPUT: }
+SYMBOL: }
+
+INPUT: 
+
+INPUT: void main(void)
+KEYWORD:        void
+ID:     main DEPTH: 0
+SYMBOL: (
+KEYWORD:        void
+SYMBOL: )
+
+INPUT: { int i;
+SYMBOL: {
+KEYWORD:        int
+ID:     i DEPTH: 1
+SYMBOL: ;
+
+INPUT:   i = 0;
+ID:     i DEPTH: 1
+SYMBOL: =
+INT:    0
+SYMBOL: ;
+
+INPUT:   while (i < 10)
+KEYWORD:        while
+SYMBOL: (
+ID:     i DEPTH: 1
+SYMBOL: <
+INT:    10
+SYMBOL: )
+
+INPUT:   { x[i] = input ();
+SYMBOL: {
+ID:     x DEPTH: 2
+SYMBOL: [
+ID:     i DEPTH: 2
+SYMBOL: ]
+SYMBOL: =
+ID:     input DEPTH: 2
+SYMBOL: (
+SYMBOL: )
+SYMBOL: ;
+
+INPUT:     i = i + 1; }
+ID:     i DEPTH: 2
+SYMBOL: =
+ID:     i DEPTH: 2
+SYMBOL: +
+INT:    1
+SYMBOL: ;
+SYMBOL: }
+
+INPUT:   sort(x,0,10);
+ID:     sort DEPTH: 1
+SYMBOL: (
+ID:     x DEPTH: 1
+SYMBOL: ,
+INT:    0
+SYMBOL: ,
+INT:    10
+SYMBOL: )
+SYMBOL: ;
+
+INPUT:   i = 0;
+ID:     i DEPTH: 1
+SYMBOL: =
+INT:    0
+SYMBOL: ;
+
+INPUT:   while (i < 10)
+KEYWORD:        while
+SYMBOL: (
+ID:     i DEPTH: 1
+SYMBOL: <
+INT:    10
+SYMBOL: )
+
+INPUT:   { output(x[i]);
+SYMBOL: {
+ID:     output DEPTH: 2
+SYMBOL: (
+ID:     x DEPTH: 2
+SYMBOL: [
+ID:     i DEPTH: 2
+SYMBOL: ]
+SYMBOL: )
+SYMBOL: ;
+
+INPUT:     i = i + 1; }
+ID:     i DEPTH: 2
+SYMBOL: =
+ID:     i DEPTH: 2
+SYMBOL: +
+INT:    1
+SYMBOL: ;
+SYMBOL: }
+
+INPUT: }
+SYMBOL: }
+
